@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국공학대학교 R&D 혁신 성과 포털 | TUKOREA Research & Innovation</title>
+  <meta name="description" content="한국공학대학교(TUKOREA)의 최신 연구 성과, 첨단 반도체·AI 제조·모빌리티·탄소중립·바이오 5대 클러스터 R&D, 특허 및 기술이전 마켓플레이스">
+  <meta name="keywords" content="한국공학대학교, TUKOREA, 산학협력, 연구성과, 반도체, AI제조, AX허브, 기술이전, 특허">
+
+  <!-- Pretendard Web Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            tukNavy: '#0f172a',
+            tukBlue: '#0284c7',
+            tukCyan: '#06b6d4',
+            tukIndigo: '#6366f1'
+          },
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="selection:bg-sky-500 selection:text-white">
+
+  <!-- Background Animated Mesh Grid -->
+  <div class="bg-ambient-grid"></div>
+
+  <!-- Global Navigation Bar -->
+  <header class="navbar-sticky">
+    <div class="container flex items-center justify-between h-20">
+      
+      <!-- Logo & Brand -->
+      <a href="#" class="flex items-center gap-3.5 group text-decoration-none">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-600 to-sky-400 p-0.5 shadow-lg shadow-sky-500/20 group-hover:scale-105 transition-transform flex items-center justify-center">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <span class="font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 text-lg tracking-wider">TUK</span>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-base md:text-lg text-white tracking-tight group-hover:text-sky-400 transition-colors">한국공학대학교</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30 font-mono">R&D PORTAL</span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-medium">Tech University of Korea · 산학융합 R&D 허브</p>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden lg:flex items-center gap-1">
+        <a href="#overview" class="nav-link active">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>대시보드</span>
+        </a>
+        <a href="#research" class="nav-link">
+          <i data-lucide="microscope" class="w-4 h-4"></i>
+          <span>연구성과</span>
+        </a>
+        <a href="#patents" class="nav-link">
+          <i data-lucide="file-badge-2" class="w-4 h-4"></i>
+          <span>특허·기술이전</span>
+        </a>
+        <a href="#stats" class="nav-link">
+          <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+          <span>R&D 통계</span>
+        </a>
+        <a href="#faculty" class="nav-link">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span>연구진</span>
+        </a>
+        <a href="#centers" class="nav-link">
+          <i data-lucide="building" class="w-4 h-4"></i>
+          <span>핵심센터</span>
+        </a>
+      </nav>
+
+      <!-- Global Actions -->
+      <div class="flex items-center gap-2.5">
+        
+        <!-- Search Trigger / Quick Search Bar -->
+        <div class="relative hidden sm:block w-48 xl:w-64">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input 
+            type="text" 
+            id="globalSearchInput" 
+            placeholder="기술명, 교수명, 키워드..." 
+            class="w-full pl-9 pr-10 py-1.5 rounded-lg bg-slate-900/80 border border-slate-700/80 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-all"
+          />
+          <kbd class="hidden xl:inline-block absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">Ctrl K</kbd>
+        </div>
+
+        <!-- Bookmarks Button -->
+        <button 
+          onclick="TukApp.openBookmarksModal()" 
+          class="p-2 rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-300 hover:text-amber-400 hover:border-amber-400/40 transition-all relative"
+          title="스크랩 보관함"
+        >
+          <i data-lucide="bookmark" class="w-4 h-4"></i>
+          <span id="bookmarkCountBadge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-slate-950 font-bold text-[10px] items-center justify-center">0</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button 
+          onclick="TukApp.toggleTheme()" 
+          class="p-2 rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-300 hover:text-sky-400 hover:border-sky-400/40 transition-all"
+          title="다크/라이트 모드 전환"
+        >
+          <i data-lucide="sun" id="themeToggleIcon" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Language Toggle -->
+        <button 
+          onclick="TukApp.toggleLanguage()" 
+          class="px-2.5 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700/80 text-xs font-bold text-slate-300 hover:text-white hover:border-slate-500 transition-all font-mono"
+          title="한/영 언어 전환"
+        >
+          <span id="langToggleText">EN</span>
+        </button>
+
+        <!-- CTA Tech Transfer Button -->
+        <button 
+          onclick="TukApp.openTechTransferModal('general')" 
+          class="btn-primary text-xs !py-2 !px-3.5 hidden md:inline-flex"
+        >
+          <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+          <span>기술이전 상담</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrap -->
+  <main class="relative-content">
+
+    <!-- Hero Section -->
+    <section id="overview" class="pt-12 pb-16 lg:pt-20 lg:pb-24 border-b border-slate-800/60">
+      <div class="container text-center max-w-4xl mx-auto">
+        
+        <!-- Top Status Pill -->
+        <div class="badge-pulse mb-6">
+          <span class="text-sky-400">대한민국 최고 수준의 산학일체형 공학 연구 허브</span>
+          <span class="mx-2 text-slate-600">|</span>
+          <span class="text-slate-300">반월·시화 국가산단 AX 거점</span>
+        </div>
+
+        <!-- Hero Headline -->
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+          산업 현장과 미래 기술을 잇는 <br class="hidden sm:inline">
+          <span class="hero-gradient-text">한국공학대학교 R&D 혁신 포털</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg text-slate-300 font-normal leading-relaxed mb-10 max-w-2xl mx-auto">
+          세계 최초 다이아몬드 전력반도체부터 산업통상자원부 280억 규모 AI 제조혁신(AX) 허브까지, 
+          대학의 우수 연구 성과와 사업화 유망 기술을 한곳에서 만나보세요.
+        </p>
+
+        <!-- Hero Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-3.5 mb-14">
+          <a href="#research" class="btn-primary">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>최신 연구성과 탐색</span>
+          </a>
+          <a href="#patents" class="btn-secondary">
+            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+            <span>기술이전 유망 특허 마켓</span>
+          </a>
+          <button onclick="TukApp.openTechTransferModal('matching')" class="btn-secondary text-sky-400 border-sky-500/30 hover:bg-sky-500/10">
+            <i data-lucide="handshake" class="w-4 h-4"></i>
+            <span>산학공동 R&D 매칭 신청</span>
+          </button>
+        </div>
+
+        <!-- Hero Metrics 5-Column Grid -->
+        <div id="metricsContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 text-left">
+          <!-- Dynamically populated by TukApp.renderMetrics() -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Cluster Navigation & Research Showcase Section -->
+    <section id="research" class="py-16 border-b border-slate-800/60">
+      <div class="container">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="flex items-center gap-2 text-sky-400 text-xs font-bold tracking-wider uppercase mb-1">
+              <i data-lucide="cpu" class="w-4 h-4"></i>
+              <span>Key Research Breakthroughs</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">5대 첨단 클러스터 최신 연구성과</h2>
+            <p class="text-sm text-slate-400 mt-1">2024~2026년 세계적 학술지 게재 논문 및 산학협력 대표 혁신 기술</p>
+          </div>
+
+          <!-- TRL Filter Buttons -->
+          <div class="flex items-center gap-1.5 p-1 rounded-xl bg-slate-900 border border-slate-800 text-xs self-start md:self-auto">
+            <span class="text-slate-400 font-semibold px-2">TRL:</span>
+            <button class="trl-filter-btn px-2.5 py-1 rounded-lg text-slate-300 hover:text-white transition-all active font-medium" data-trl="all" onclick="TukApp.setTrlFilter('all')">전체</button>
+            <button class="trl-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all font-medium" data-trl="basic" onclick="TukApp.setTrlFilter('basic')">기초(1~3)</button>
+            <button class="trl-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all font-medium" data-trl="applied" onclick="TukApp.setTrlFilter('applied')">응용(4~5)</button>
+            <button class="trl-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all font-medium" data-trl="pilot" onclick="TukApp.setTrlFilter('pilot')">실증(6~7)</button>
+            <button class="trl-filter-btn px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition-all font-medium" data-trl="commercial" onclick="TukApp.setTrlFilter('commercial')">상용화(8~9)</button>
+          </div>
+        </div>
+
+        <!-- 5T Cluster Tab Pills -->
+        <div id="clusterFilterTabs" class="flex flex-wrap items-center gap-2 mb-8">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Research Grid -->
+        <div id="researchGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamically populated -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive Data Visualizer & Stats Section -->
+    <section id="stats" class="py-16 border-b border-slate-800/60 bg-slate-950/40">
+      <div class="container">
+        
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-2">
+            <i data-lucide="pie-chart" class="w-3.5 h-3.5"></i>
+            <span>Interactive Data Dashboard</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">한국공학대 R&D 통계 & 파급 효과</h2>
+          <p class="text-sm text-slate-400 mt-2">연구비 수주액 추이, 5대 전략분야 지식재산권 비중 및 기술성숙도 단계별 현황</p>
+        </div>
+
+        <!-- 3 Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Chart 1: Funding Trend -->
+          <div class="glass-card p-6 lg:col-span-2 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-sky-400"></i>
+                    연도별 R&D 연구비 수주 추이 (2021~2026)
+                  </h3>
+                  <p class="text-xs text-slate-400 mt-0.5">정부 국책사업 및 민간 기업 산학공동 R&D 수주 규모</p>
+                </div>
+                <span class="text-xs font-mono font-bold text-sky-400 px-2 py-1 rounded bg-sky-500/10 border border-sky-500/20">
+                  총 1,830억 원
+                </span>
+              </div>
+            </div>
+            <div class="h-64 sm:h-72 w-full mt-4">
+              <canvas id="fundingChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 2: Cluster Distribution -->
+          <div class="glass-card p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <i data-lucide="target" class="w-4 h-4 text-indigo-400"></i>
+                  5대 첨단분야 특허 비중
+                </h3>
+                <span class="text-xs text-slate-500">1,580건 기준</span>
+              </div>
+              <p class="text-xs text-slate-400">클러스터별 특허 보유 점유율</p>
+            </div>
+            <div class="h-64 w-full flex items-center justify-center mt-2">
+              <canvas id="clusterChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sub Row: TRL Breakdown & Industry Impact Map -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          
+          <!-- Chart 3: TRL Distribution -->
+          <div class="glass-card p-6">
+            <h3 class="text-base font-bold text-white flex items-center gap-2 mb-2">
+              <i data-lucide="layers" class="w-4 h-4 text-emerald-400"></i>
+              기술성숙도(TRL) 분포 현황
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">기초연구부터 상용화 양산 단계까지의 전주기 파이프라인</p>
+            <div class="h-52 w-full">
+              <canvas id="trlChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Industry Ecosystem Card -->
+          <div class="glass-card p-6 lg:col-span-2 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <i data-lucide="network" class="w-4 h-4 text-amber-400"></i>
+                  수도권 서남부 산학협력 초광역 생태계
+                </h3>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                  2년 연속 최우수 S등급 (일학습병행)
+                </span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                한국공학대학교는 반월·시화 국가산업단지, 배곧 서울대병원 R&D 클러스터, 판교 IT 밸리를 삼각 축으로 연결하는 
+                산학일체형 혁신 플랫폼입니다. 4,500여 개 가족회사와 11,000여 개 협력기업 전수조사를 기반으로 맞춤형 R&D와 기술이전을 상시 추진합니다.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-slate-800">
+              <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-800">
+                <p class="text-[11px] text-slate-400">공용연구장비</p>
+                <p class="text-lg font-bold text-white mt-0.5">180<span class="text-xs font-normal text-slate-400">여 종</span></p>
+                <p class="text-[10px] text-sky-400">반도체 클린룸 포함</p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-800">
+                <p class="text-[11px] text-slate-400">가족회사 네트워크</p>
+                <p class="text-lg font-bold text-white mt-0.5">4,500<span class="text-xs font-normal text-slate-400">개사</span></p>
+                <p class="text-[10px] text-emerald-400">5T ICC 연계</p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-800">
+                <p class="text-[11px] text-slate-400">산학공동 프로젝트</p>
+                <p class="text-lg font-bold text-white mt-0.5">320<span class="text-xs font-normal text-slate-400">건/연</span></p>
+                <p class="text-[10px] text-indigo-400">학생 연구원 매칭</p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-900/60 border border-slate-800">
+                <p class="text-[11px] text-slate-400">기업 만족도</p>
+                <p class="text-lg font-bold text-white mt-0.5">94.8<span class="text-xs font-normal text-slate-400">점</span></p>
+                <p class="text-[10px] text-amber-400">산학협력 최우수</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Tech Transfer & Patent Marketplace Section -->
+    <section id="patents" class="py-16 border-b border-slate-800/60">
+      <div class="container">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="flex items-center gap-2 text-sky-400 text-xs font-bold tracking-wider uppercase mb-1">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              <span>Tech Transfer Market</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">특허 및 기술이전 마켓플레이스</h2>
+            <p class="text-sm text-slate-400 mt-1">기업의 사업화 성공을 위해 즉시 이전 가능한 유망 원천 특허 및 이전 성약 사례</p>
+          </div>
+          <button onclick="TukApp.openTechTransferModal('general')" class="btn-primary text-xs self-start md:self-auto">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            맞춤 기술 탐색 의뢰
+          </button>
+        </div>
+
+        <!-- Patents Table Wrapper -->
+        <div class="glass-panel overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 bg-slate-900/60 text-xs font-semibold text-slate-400">
+                  <th class="py-3.5 px-4">특허명 및 발명 요약</th>
+                  <th class="py-3.5 px-4 whitespace-nowrap">연구분야</th>
+                  <th class="py-3.5 px-4 whitespace-nowrap">기술단계</th>
+                  <th class="py-3.5 px-4 whitespace-nowrap">발명자 (소속)</th>
+                  <th class="py-3.5 px-4 whitespace-nowrap">이전 상태</th>
+                  <th class="py-3.5 px-4 whitespace-nowrap text-right">상담 신청</th>
+                </tr>
+              </thead>
+              <tbody id="patentsTableBody" class="divide-y divide-slate-800/40 text-sm">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tech Transfer 4-Step Process Guide -->
+        <div class="mt-12 p-6 lg:p-8 rounded-2xl bg-slate-900/40 border border-slate-800/80">
+          <div class="text-center max-w-xl mx-auto mb-8">
+            <h3 class="text-lg font-bold text-white">한국공학대학교 원스톱 기술이전 프로세스</h3>
+            <p class="text-xs text-slate-400 mt-1">대학 TLO(기술사업화실) 전담 인력이 전 과정을 신속하게 지원합니다.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 relative">
+              <span class="text-2xl font-black text-sky-500/20 font-mono absolute top-3 right-3">01</span>
+              <p class="text-xs font-bold text-sky-400 mb-1">STEP 01</p>
+              <h4 class="text-sm font-bold text-white mb-2">기술 탐색 및 상담 접수</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">포털에서 특허를 검색하고 온라인 상담 폼으로 즉시 접수</p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 relative">
+              <span class="text-2xl font-black text-indigo-500/20 font-mono absolute top-3 right-3">02</span>
+              <p class="text-xs font-bold text-indigo-400 mb-1">STEP 02</p>
+              <h4 class="text-sm font-bold text-white mb-2">전문 변리사 & 교수 매칭</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">연구 책임자와 직접 기술 미팅 주선 및 세부 적용성 검토</p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 relative">
+              <span class="text-2xl font-black text-emerald-500/20 font-mono absolute top-3 right-3">03</span>
+              <p class="text-xs font-bold text-emerald-400 mb-1">STEP 03</p>
+              <h4 class="text-sm font-bold text-white mb-2">가치평가 및 조건 협의</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">통상/전용실시권 및 경상기술료 등 기업 맞춤형 계약 구조 설계</p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 relative">
+              <span class="text-2xl font-black text-amber-500/20 font-mono absolute top-3 right-3">04</span>
+              <p class="text-xs font-bold text-amber-400 mb-1">STEP 04</p>
+              <h4 class="text-sm font-bold text-white mb-2">계약 체결 & 후속 R&D</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">정부 사업화 R&D 과제 연계 및 대학 공용장비 무상/할인 지원</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Faculty & Research Labs Section -->
+    <section id="faculty" class="py-16 border-b border-slate-800/60">
+      <div class="container">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="flex items-center gap-2 text-sky-400 text-xs font-bold tracking-wider uppercase mb-1">
+              <i data-lucide="award" class="w-4 h-4"></i>
+              <span>Distinguished Researchers</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">우수 연구책임자 및 전문 연구실</h2>
+            <p class="text-sm text-slate-400 mt-1">세계적 학술 연구와 산업계 기술이전을 선도하는 한국공학대학교 대표 교수진</p>
+          </div>
+        </div>
+
+        <div id="facultyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamically populated -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Flagship Research Centers & Infrastructure Section -->
+    <section id="centers" class="py-16 border-b border-slate-800/60 bg-slate-950/40">
+      <div class="container">
+        
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 mb-2">
+            <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+            <span>R&D Infrastructure</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">대형 국책 연구센터 & 공용장비 인프라</h2>
+          <p class="text-sm text-slate-400 mt-2">산자부 280억 AX 허브, 반도체 클린룸 및 가상 시뮬레이션 인프라</p>
+        </div>
+
+        <div id="centersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamically populated -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- News & Announcements Section -->
+    <section class="py-14 border-b border-slate-800/60">
+      <div class="container">
+        <div class="p-6 md:p-8 rounded-2xl bg-slate-900/50 border border-slate-800/80">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="bell" class="w-4 h-4 text-sky-400"></i>
+              최신 R&D 공지 및 주요 소식
+            </h3>
+            <span class="text-xs text-slate-400">실시간 업데이트</span>
+          </div>
+          <div id="newsList" class="space-y-1">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="py-12 bg-slate-950 border-t border-slate-800 text-slate-400 text-xs">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-slate-800/60">
+        
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="font-extrabold text-white text-base">한국공학대학교 산학협력단</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">IACF</span>
+          </div>
+          <p class="text-slate-400 leading-relaxed mb-4 max-w-md">
+            한국공학대학교는 산학협력 선도대학으로서 지역 산단 및 첨단 미래 산업의 기술 경쟁력 강화를 위한 원천 R&D 및 사업화를 적극 지원합니다.
+          </p>
+          <div class="flex items-center gap-4 text-slate-400">
+            <span>주소: 경기도 시흥시 산기대학로 237 (정왕동) 산학융합 R&D관</span>
+          </div>
+        </div>
+
+        <div>
+          <h5 class="text-white font-bold text-sm mb-3">R&D 주요 링크</h5>
+          <ul class="space-y-2">
+            <li><a href="https://www.tukorea.ac.kr" target="_blank" class="hover:text-sky-400 transition-colors">한국공학대학교 공식 홈페이지</a></li>
+            <li><a href="#" onclick="TukApp.showToast('산학협력단 홈페이지로 이동합니다.'); return false;" class="hover:text-sky-400 transition-colors">한국공학대 산학협력단(IACF)</a></li>
+            <li><a href="#" onclick="TukApp.showToast('공용연구장비 포털로 연결됩니다.'); return false;" class="hover:text-sky-400 transition-colors">공용연구장비지원센터</a></li>
+            <li><a href="#" onclick="TukApp.showToast('가족회사 종합관리시스템으로 이동합니다.'); return false;" class="hover:text-sky-400 transition-colors">5T ICC 가족회사 포털</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h5 class="text-white font-bold text-sm mb-3">기술이전 전담 문의</h5>
+          <p class="text-slate-300 font-semibold mb-1">기술사업화실 (TLO)</p>
+          <p class="text-sky-400 font-mono text-sm mb-2">TEL. 031-8041-0114</p>
+          <p class="text-slate-400 font-mono text-xs mb-3">E-mail: tlo@tukorea.ac.kr</p>
+          <button onclick="TukApp.openTechTransferModal('general')" class="btn-primary text-xs !py-1.5 !px-3">
+            온라인 1:1 상담 접수
+          </button>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+        <p>© 2026 Tech University of Korea (TUKOREA) Research & Innovation. All Rights Reserved.</p>
+        <div class="flex items-center gap-4">
+          <a href="#" class="hover:underline">개인정보처리방침</a>
+          <a href="#" class="hover:underline">연구윤리규정</a>
+          <a href="#" class="hover:underline">산학협력규정</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="modal-overlay">
+    <div id="modalBody" class="modal-content">
+      <!-- Dynamically filled -->
+    </div>
+  </div>
+
+  <!-- Tech Transfer & Inquiry Modal -->
+  <div id="inquiryModal" class="modal-overlay">
+    <div id="inquiryModalBody" class="modal-content">
+      <!-- Dynamically filled -->
+    </div>
+  </div>
+
+  <!-- Bookmarks Modal -->
+  <div id="bookmarksModal" class="modal-overlay">
+    <div id="bookmarksModalBody" class="modal-content max-w-xl">
+      <!-- Dynamically filled -->
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
